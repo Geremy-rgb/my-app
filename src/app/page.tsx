@@ -1,46 +1,63 @@
 "use client"
 
-import React, { useState } from "react";
-import "./ui/globals.css";
+import { userSchema } from "@/validation/userSchema";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 
-const Page: React.FC = () => {
-  const [biography, setBiography] = useState<string>("");
-  const [savedBiography, setSavedBiography] = useState<string | null>(null);
+;
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setBiography(event.target.value);
-  };
 
-  const handleSave = () => {
-    setSavedBiography(biography);
-  };
+function Home () {
 
-  return (
-    <div className="App">
-      <h1>Biografía Personal</h1>
+  const {register, handleSubmit, watch, formState: {errors}} = useForm({
+    resolver: zodResolver(userSchema)
 
-      {/* Campo de texto para la biografía */}
-      <textarea
-        placeholder="Ingresa tu biografía aquí"
-        value={biography}
-        onChange={handleChange}
-        rows={10}
-        cols={50}
-      />
 
-      <div>
-        <button onClick={handleSave}>Guardar Biografía</button>
-      </div>
+   });
 
-      {/* Mostrar la biografía guardada */}
-      {savedBiography && (
-        <div className="saved-biography">
-          <h2>Biografía Guardada:</h2>
-          <p>{savedBiography}</p>
-        </div>
-      )}
+
+   console.log(errors)
+  return(
+
+  <div>
+
+    <form onSubmit={handleSubmit(data => {console.log(data)})}>
+
+    <label htmlFor="name">Nombre</label>
+    <input type="text" id="name"
+    {...register("name")}/>
+    
+
+    <label htmlFor="lastName">Apellido</label>
+    <input type="text" id="lastName"
+    {...register("lastName")}/>
+
+    <label htmlFor="age">Edad</label>
+    <input type="text" id="age"
+    {...register("age")}/>
+
+    <label htmlFor="biography">Biografia </label>
+    <textarea id="biography" 
+    {...register("biography")} 
+   
+    />
+
+    <button type="submit" style={{background:"gray"}}>
+      submit
+    </button>
+
+    </form>
+    <div>
+      {JSON.stringify(watch(), null, 2)}
     </div>
-  );
-};
+    
+  </div>
 
-export default Page;
+  )
+  
+
+
+  
+}
+
+export default Home;
